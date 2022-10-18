@@ -7,42 +7,46 @@
 	.global Start
 	
 Start:
-	//LED
-	LDR R0, =GPIO_BASE ; Set R0 to General Purpose IO base port
-	LDR R1, =PORT_SIZE ; 
+	// Led
+	LDR R0, =GPIO_BASE
+	LDR R1, =PORT_SIZE
 	LDR R2, =LED_PORT
-	MUL R1, R1, R2 				// Save in R1 times R2 in R1.
-	ADD R0, R0, R1				// Save in R0 plus R1 in R0.
 
-	ldr r1, =GPIO_PORT_DOUTCLR
-	add r1, r0, r1      // r1 er base + portsize*ledport
+	MUL R1, R1, R2
+	ADD R0, R0, R1
 
-	ldr r2, =GPIO_PORT_DOUTSET
-	add r0, r0, r2      // r0 er base + portsize*ledport + port_doutset
+	// Address of led (on/off)
+	ADD R1, R0, GPIO_PORT_DOUTCLR   // r1 to base + portsize * ledport + port_doutclr
+	ADD R0, R0, GPIO_PORT_DOUTSET   // r0 to base + portsize * ledport + port_doutset
 
-	ldr r2, =GPIO_BASE
-	ldr r3, =PORT_SIZE
-	ldr r4, =BUTTON_PORT
-	mul r3, r3, r4
-	add r2, r2, r3
-	ldr r5, =GPIO_PORT_DIN
-	add r2, r2, r5	   //adressen til knappen
+	// Button
+	LDR R2, =GPIO_BASE
+	LDR R3, =PORT_SIZE
+	LDR R4, =BUTTON_PORT
 
-	ldr r3, =1         //setter r3 til ledpin output
-	lsl r3, LED_PIN
+	MUL R3, R3, R4
+	ADD R2, R2, R3
 
-	ldr r4, =1         //setter r4 til button pin output
-	lsl r4, BUTTON_PIN
+	// Address of button
+	ADD R2, R2, GPIO_PORT_DIN	// r2 to base + portsize * buttonport + port_din
+
+	LDR R3, =#1				// Set R3 to led pin
+	LSL R3, LED_PIN
+
+	LDR R4, =#1				// Set R4 to button pin
+	LSL R4, BUTTON_PIN
 
 Loop:
-	ldr r6, [r2]    //setter r6 lik verdien på r2, altså knappens tilstand
-	and r6, r6, r4  //and-er med button output
-	cmp r6, r4      //ser om r6 && r4 er lik r5
-	bne LedOn       //branch if not equal
-	str r3, [r1]    //led av
-	b Loop          //tilbake til loop (idle loop)
+	LDR R6, [R2]    	// Set R6 to the value of R2 (Button condition)
+	AND R6, R6, R4  	// And with button pin
+	CMP R6, R4      	// Sets condition flags by comparing R6 & R4
+	BNE LedOn       	// branch to led on if not equal
+	B LedOff
 LedOn:
-	str r3, [r0]    //led på
-	b Loop          //tilbake til loop
+	STR R3, [R0]    	// led on (condifion of R0)
+	B Loop          	// Branch back to loop
+LedOff:
+	STR R3, [R1]		// led off (condition of R1)
+	B Loop				// Branch back to loop
 
 NOP // Behold denne paa bunnen av fila
