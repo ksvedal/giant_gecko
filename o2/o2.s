@@ -136,10 +136,10 @@ SysTick_Handler:
 		BX LR
 
 	reset_tenths:
-    	MOV R9, #0
-        STR R9, [R10]
+    		MOV R9, #0
+		STR R9, [R10]
 
-        BX LR
+		BX LR
 
 .global GPIO_ODD_IRQHandler
 .thumb_func
