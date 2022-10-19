@@ -12,18 +12,18 @@ Start:
 	// Systick constants
 	LDR R0, = SYSTICK_BASE + SYSTICK_CTRL
 	LDR R1, = SysTick_CTRL_TICKINT_Msk
-    LDR R2, = SysTick_CTRL_CLKSOURCE_Msk
-    LDR R3, = SYSTICK_BASE + SYSTICK_LOAD	// systick reload value register
-    LDR R4, = SYSTICK_BASE + SYSTICK_VAL
+	LDR R2, = SysTick_CTRL_CLKSOURCE_Msk
+	LDR R3, = SYSTICK_BASE + SYSTICK_LOAD	// systick reload value register
+	LDR R4, = SYSTICK_BASE + SYSTICK_VAL
 
 	// Systick control:
-    ORR R1, R1, R2
-    STR R1, [R0]
+	ORR R1, R1, R2
+	STR R1, [R0]
 
 	// Interrupt frequency
-    LDR R1, = FREQUENCY / 10	// 10 interrupts pr second
-    STR R1, [R3]
-    STR R1, [R4]				// first interrupt
+	LDR R1, = FREQUENCY / 10	// 10 interrupts pr second
+	STR R1, [R3]
+	STR R1, [R4]				// first interrupt
 
 	// GPIO port select
 	LDR R5, = GPIO_BASE + GPIO_EXTIPSELH
@@ -123,19 +123,19 @@ SysTick_Handler:
 		BX LR
 
 
-    reset_minutes:
-    	MOV R9, #0
-        STR R9, [R12]
+	reset_minutes:
+		MOV R9, #0
+		STR R9, [R12]
 
 		BX LR
 
-    reset_seconds:
-    	MOV R9, #0
-        STR R9, [R11]
+	reset_seconds:
+		MOV R9, #0
+		STR R9, [R11]
 
 		BX LR
 
-    reset_tenths:
+	reset_tenths:
     	MOV R9, #0
         STR R9, [R10]
 
@@ -146,10 +146,10 @@ SysTick_Handler:
 GPIO_ODD_IRQHandler:
 
 	// Start the clock
-    LDR R1, = 0b1
-    LDR R2, [R0]
-    EOR R2, R1
-    STR R2, [R0]
+	LDR R1, = 0b1
+	LDR R2, [R0]
+	EOR R2, R1
+	STR R2, [R0]
 
 	// Clears interrupt
 	MOV R1, #1
