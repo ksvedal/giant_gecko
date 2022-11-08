@@ -13,7 +13,7 @@ Start:
 	LDR R0, = SYSTICK_BASE + SYSTICK_CTRL
 	LDR R1, = SysTick_CTRL_TICKINT_Msk
 	LDR R2, = SysTick_CTRL_CLKSOURCE_Msk
-	LDR R3, = SYSTICK_BASE + SYSTICK_LOAD	// systick reload value register
+	LDR R3, = SYSTICK_BASE + SYSTICK_LOAD
 	LDR R4, = SYSTICK_BASE + SYSTICK_VAL
 
 	// Systick control:
@@ -74,7 +74,7 @@ Start:
 	LDR R11, = seconds
 	LDR R12, = minutes
 
-Loop:									// loop
+Loop:
   	B Loop
 
 .global SysTick_Handler
@@ -83,7 +83,7 @@ SysTick_Handler:
 
 	B increment_tenths
 
-	BX LR // Back to loop
+	BX LR
 
 	increment_tenths:
 		LDR R9, [R10]
